@@ -12,6 +12,11 @@ export const propertyFixture = {
     'city': {
       'id': 'http://jsonschema.net/address/city',
       'type': 'string'
+    },
+    'state': {
+      'id': 'http://jsonschema.net/address/city',
+      'type': 'string',
+      'enum': ['NY', 'IN']
     }
   },
   'required': [
@@ -41,7 +46,7 @@ test('throws an error if schema is not provided to constructor', function(assert
 test('accessing properties returns a list of properties', function(assert) {
   let propertyKeys = Object.keys(property.properties);
 
-  assert.deepEqual(['streetAddress', 'city'], propertyKeys, 'known keys are present');
+  assert.deepEqual(['streetAddress', 'city', 'state'], propertyKeys, 'known keys are present');
 });
 
 test('accessing properties returns an instance of `Property` model', function(assert) {
@@ -76,4 +81,10 @@ test('sets to undefined when attempting to build default for non array/object ty
   });
 
   assert.equal(property.buildDefaultValue(), undefined, 'uses undefined for non array/object properties');
+});
+
+test('inputType returns the correct type of element', function(assert) {
+  assert.equal(property.properties.streetAddress.inputType, 'text');
+  assert.equal(property.properties.city.inputType, 'text');
+  assert.equal(property.properties.state.inputType, 'select');
 });
